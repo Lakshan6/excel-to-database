@@ -1,0 +1,18 @@
+{
+  "_comment": "Describes the layout of every product sheet in the workbook.",
+
+  "header_row": 2,
+  "data_start_row": 3,
+
+  "columns": {
+    "s_no": "S.No.",
+    "test": "Test",
+    "parameter": "Parameter",
+    "observation": "Observation/ Observed Value",
+    "remarks": "If Not Satisfactory/ If value within/not within limit"
+  },
+
+  "title_pattern": "^(?P<prod_name>.+?)\\s+EP\\s*Code\\s+(?P<ep_code>\\S+)$",
+
+  "test_desc_format": "{test}: {parameter}"
+}
