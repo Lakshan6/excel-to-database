@@ -33,7 +33,6 @@ def run_import(excel_path: str, mapping_path: str) -> None:
     data_start_row = mapping["data_start_row"]
     columns_map = mapping["columns"]
     title_pattern = mapping["title_pattern"]
-    test_desc_format = mapping.get("test_desc_format", "{test}: {parameter}")
 
     total_sheets = 0
     total_specs = 0
@@ -59,18 +58,27 @@ def run_import(excel_path: str, mapping_path: str) -> None:
             logger.info("Sheet '%s': %d parameter rows found", sheet_name, len(rows))
 
             for row in rows:
-                test_desc = test_desc_format.format(
-                    test=row.test or "", parameter=row.parameter
-                ).strip(": ").strip()
+                test_desc = (row.test or "").strip()
+                if not test_desc:
+                    logger.warning(
+                        "Sheet '%s': parameter '%s' has no Test category (check "
+                        "template layout / forward-fill), skipping row.",
+                        sheet_name, row.parameter,
+                    )
+                    continue
 
+                # get_or_create_test looks up by test_desc first (e.g. "Visual
+                # Test") and reuses the existing id if found, only inserting a
+                # new row when it's genuinely a new test category.
                 test = crud.get_or_create_test(session, test_desc)
 
-                # spec_val / min / max / is_ranged / data_type intentionally left
-                # blank for now, per current project stage.
+                # min / max / is_ranged / data_type intentionally left blank for
+                # now, per current project stage.
                 crud.create_spec(
                     session,
                     prod_id=product.id,
                     test_id=test.id,
+                    spec_val=row.parameter,
                 )
                 total_specs += 1
 

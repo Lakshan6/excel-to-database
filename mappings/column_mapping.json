@@ -12,7 +12,5 @@
     "remarks": "If Not Satisfactory/ If value within/not within limit"
   },
 
-  "title_pattern": "^(?P<prod_name>.+?)\\s+EP\\s*Code\\s+(?P<ep_code>\\S+)$",
-
-  "test_desc_format": "{test}: {parameter}"
+  "title_pattern": "^(?P<prod_name>.+?)\\s+EP\\s*Code\\s+(?P<ep_code>\\S+)$"
 }
